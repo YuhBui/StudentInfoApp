@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">StudentInfoApp</string>
+
+    <string-array name="categories">
+        <item>Homework</item>
+        <item>Project</item>
+        <item>Exam</item>
+    </string-array>
+</resources>
+
