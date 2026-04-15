@@ -31,8 +31,8 @@ public class TaskDetailActivity extends AppCompatActivity {
 
         tvTitle.setText(title);
         tvDesc.setText(desc);
-        tvCategory.setText("Danh mục: " + (category != null ? category : "N/A"));
-        tvDeadline.setText("Hạn chót: " + (deadline != null ? deadline : "N/A"));
+        tvCategory.setText("Category: " + (category != null ? category : "N/A"));
+        tvDeadline.setText("Deadline: " + (deadline != null ? deadline : "N/A"));
 
         btnEdit.setOnClickListener(v -> {
             Intent editIntent = new Intent(TaskDetailActivity.this, AddTaskActivity.class);

@@ -9,7 +9,7 @@
     <View
         android:id="@+id/headerBackground"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="64dp"
         android:background="#1976D2"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -17,147 +17,132 @@
         android:id="@+id/tvAppTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Student Task Manager"
+        android:layout_marginStart="16dp"
+        android:text="Task Manager with Fragments"
         android:textColor="#FFFFFF"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/headerBackground"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
-
-    <TextView
-        android:id="@+id/tvStudentInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:text="SV: Bùi Quang Huy - MSSV: 0013168 - Lớp: 68PM3"
-        android:background="#E3F2FD"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/headerBackground" />
 
     <LinearLayout
         android:id="@+id/llCourseInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#E3F2FD"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="12dp"
-        app:layout_constraintTop_toBottomOf="@id/tvStudentInfo">
+        android:padding="16dp"
+        android:background="@android:color/white"
+        app:layout_constraintTop_toBottomOf="@id/headerBackground">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Môn học: Lập trình ứng dụng di động"
-            android:textColor="#1976D2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giảng viên: Nguyễn Đình Anh"
-            android:textColor="#1976D2" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Học kỳ: 2 2025-2026"
-            android:textColor="#1976D2" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llCourseInfo">
-
-        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:text="Bùi Quang Huy - 0013168 - 68PM3"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="#333333" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardTask1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp"
-                android:layout_marginBottom="12dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?android:attr/selectableItemBackground">
-                <RelativeLayout
-                    android:padding="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Môn học: Phát triển ứng dụng cho thiết bị di động"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            android:textColor="#555555" />
 
-                    <TextView
-                        android:id="@+id/t1"
-                        android:text="Bài tập Toán cao cấp"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Giảng viên: Nguyễn Đình Anh"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#555555" />
 
-                    <TextView
-                        android:layout_below="@id/t1"
-                        android:text="Hạn: 10/04/2026"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-                    <TextView
-                        android:layout_alignParentEnd="true"
-                        android:text="Homework"
-                        android:textColor="#1976D2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Học kỳ: 2 2025-2026"
+            android:textSize="14sp"
+            android:layout_marginTop="2dp"
+            android:textColor="#555555" />
+    </LinearLayout>
 
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/tvCategoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Task Categories"
+        android:textColor="#9E9E9E"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llCourseInfo" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="4dp">
-                <RelativeLayout
-                    android:padding="16dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+    <HorizontalScrollView
+        android:id="@+id/hsvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:scrollbars="none"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/tvCategoryLabel">
 
-                    <TextView android:id="@+id/t2"
-                        android:text="Dự án lập trình Java"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_below="@id/t2"
-                        android:text="Hạn: 20/04/2026"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btnCategoryAll"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#1976D2"
+                android:text="All Tasks"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
 
-                    <TextView
-                        android:layout_alignParentEnd="true"
-                        android:text="Project"
-                        android:textColor="#FF9800"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btnCategoryHomework"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="#1976D2"
+                android:text="Homework"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
 
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/btnCategoryProject"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="16dp"
+                android:backgroundTint="#1976D2"
+                android:text="Project"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
         </LinearLayout>
-    </ScrollView>
+    </HorizontalScrollView>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/hsvCategories" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="#1976D2"
         app:tint="#FFFFFF"
