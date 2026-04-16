@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F9F9F9"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:id="@+id/headerSettings"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#1976D2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="-42dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="22dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Notification Settings"
+                android:textColor="#1976D2"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="App Settings"
+                android:textColor="#1976D2"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Theme"
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"/>
+            <Spinner
+                android:id="@+id/spinnerTheme"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@android:drawable/btn_dropdown"
+                android:entries="@array/theme_options"
+                android:layout_marginBottom="40dp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Enable notifications"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"/>
+                <Switch
+                    android:id="@+id/switchNotifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:thumbTint="#4CAF50"
+                    android:trackTint="#A5D6A7"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reset Settings"
+                    android:textColor="#F44336"
+                    android:layout_centerVertical="true"/>
+                <Button
+                    android:id="@+id/btnReset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RESET"
+                    android:backgroundTint="#F44336"
+                    android:textColor="#FFFFFF"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

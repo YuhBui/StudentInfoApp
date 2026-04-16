@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:fitsSystemWindows="true">
 
     <View
         android:id="@+id/headerBackground"
@@ -25,6 +26,32 @@
         app:layout_constraintBottom_toBottomOf="@id/headerBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/headerBackground" />
+
+    <ImageButton
+        android:id="@+id/btnOpenGallery"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Quản lý ảnh"
+        app:layout_constraintTop_toTopOf="@id/headerBackground"
+        app:layout_constraintBottom_toBottomOf="@id/headerBackground"
+        app:layout_constraintEnd_toStartOf="@id/btnOpenSettings"
+        android:layout_marginEnd="8dp"
+        app:tint="#FFFFFF" />
+
+    <ImageButton
+        android:id="@+id/btnOpenSettings"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_settings"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Mở cài đặt"
+        app:layout_constraintTop_toTopOf="@id/headerBackground"
+        app:layout_constraintBottom_toBottomOf="@id/headerBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        app:tint="#FFFFFF" />
 
     <LinearLayout
         android:id="@+id/llCourseInfo"

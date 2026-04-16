@@ -2,10 +2,16 @@ package com.example.studentinfoapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageButton;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.studentinfoapp.helper.PreferenceHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        applyTheme();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -39,5 +47,43 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
             addTaskLauncher.launch(intent);
         });
+
+        // Trong hàm onCreate() của MainActivity.java
+        ImageButton btnSettings = findViewById(R.id.btnOpenSettings);
+        btnSettings.setOnClickListener(v -> {
+            // Tạo Intent để chuyển từ MainActivity sang SettingsActivity [cite: 241, 258]
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
+
+        // Khai báo và xử lý nút mở màn hình Quản lý ảnh
+        ImageButton btnGallery = findViewById(R.id.btnOpenGallery);
+        btnGallery.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ImagePickerActivity.class);
+            startActivity(intent);
+        });
+
+        PreferenceHelper prefHelper = new PreferenceHelper(this);
+        prefHelper.setTheme("Dark");
+        Log.d("Lab10_Test", "Current Theme: " + prefHelper.getTheme());
+    }
+
+    private void applyTheme() {
+        PreferenceHelper prefHelper = new PreferenceHelper(this);
+        String theme = prefHelper.getTheme();
+
+        if (theme.equals("Dark")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else if (theme.equals("Light")) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyTheme();
     }
 }
