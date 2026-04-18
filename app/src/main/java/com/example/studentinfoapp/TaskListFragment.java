@@ -31,12 +31,24 @@ public class TaskListFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         adapter = new TaskAdapter(task -> {
-            Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
-            intent.putExtra("TASK_TITLE", task.getTitle());
-            intent.putExtra("TASK_DESC", task.getDescription());
-            intent.putExtra("TASK_CATEGORY", task.getCategory());
-            intent.putExtra("TASK_DEADLINE", task.getDueDate());
-            startActivity(intent);
+            // Kiểm tra xem Container Detail có tồn tại trên màn hình này không
+            boolean isTablet = getActivity().findViewById(R.id.taskDetailContainer) != null;
+
+            if (isTablet) {
+                // Đang mở trên Tablet: Load vào TaskDetailContainer
+                TaskDetailFragment detailFrag = TaskDetailFragment.newInstance(task);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.taskDetailContainer, detailFrag)
+                        .commit();
+            } else {
+                // Đang mở trên Phone: Nhảy sang TaskDetailActivity như cũ
+                Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                intent.putExtra("TASK_TITLE", task.getTitle());
+                intent.putExtra("TASK_DESC", task.getDescription());
+                intent.putExtra("TASK_CATEGORY", task.getCategory());
+                intent.putExtra("TASK_DEADLINE", task.getDueDate());
+                startActivity(intent);
+            }
         });
         recyclerView.setAdapter(adapter);
 

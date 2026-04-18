@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.studentinfoapp.helper.PreferenceHelper;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.studentinfoapp.TaskDetailFragment;
 
 public class MainActivity extends AppCompatActivity {
     private TaskViewModel viewModel;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     String title = result.getData().getStringExtra("NEW_TASK_TITLE");
-                    Task newTask = new Task(title, "N/A", "N/A", "N/A", 1);
+                    Task newTask = new Task(title, "N/A", "N/A", "N/A", "Low", false);
                     viewModel.addTask(newTask);
                 }
             });
@@ -66,6 +67,27 @@ public class MainActivity extends AppCompatActivity {
         PreferenceHelper prefHelper = new PreferenceHelper(this);
         prefHelper.setTheme("Dark");
         Log.d("Lab10_Test", "Current Theme: " + prefHelper.getTheme());
+    }
+
+    public void onTaskSelected(Task task) {
+        TaskDetailFragment detailFragment = new TaskDetailFragment();
+        Bundle args = new Bundle();
+        args.putString("TASK_TITLE", task.getTitle());
+        detailFragment.setArguments(args);
+
+        // Kiểm tra xem ID detailContainer có tồn tại trên màn hình hiện tại không
+        if (findViewById(R.id.taskDetailContainer) != null) {
+            // ĐANG CHẠY TRÊN TABLET: Thay thế vùng bên phải
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.taskDetailContainer, detailFragment)
+                    .commit();
+        } else {
+            // ĐANG CHẠY TRÊN PHONE: Chuyển toàn màn hình và thêm vào BackStack
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainer, detailFragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
     }
 
     private void applyTheme() {

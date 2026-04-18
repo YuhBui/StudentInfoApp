@@ -1,21 +1,36 @@
 package com.example.studentinfoapp;
 
-import java.util.ArrayList;
+import android.content.Context;
+import androidx.lifecycle.MutableLiveData;
+import com.example.studentinfoapp.helper.DatabaseHelper;
 import java.util.List;
 
 public class TaskRepository {
-    private List<Task> data = new ArrayList<>();
+    private DatabaseHelper dbHelper;
+    private MutableLiveData<List<Task>> tasksLiveData = new MutableLiveData<>();
 
-    public TaskRepository() {
-        data.add(new Task("Bài tập Toán cao cấp", "Làm bài tập chương 3", "10/04/2026", "Homework", 2));
-        data.add(new Task("Dự án lập trình Java", "Hoàn thành code app", "20/04/2026", "Project", 1));
+    public TaskRepository(Context context) {
+        dbHelper = new DatabaseHelper(context);
+        loadTasksFromDb(); // Tải dữ liệu ngay khi khởi tạo
     }
 
-    public List<Task> getAllTasks() {
-        return data;
+    // Đọc từ Database và cập nhật lên LiveData
+    public void loadTasksFromDb() {
+        List<Task> taskList = dbHelper.getAllTasks();
+        tasksLiveData.setValue(taskList);
     }
 
-    public void addTask(Task task) {
-        data.add(task);
+    public MutableLiveData<List<Task>> getTasks() {
+        return tasksLiveData;
+    }
+
+    public void insertTask(Task task) {
+        dbHelper.insertTask(task);
+        loadTasksFromDb(); // Load lại list sau khi thêm
+    }
+
+    public void deleteTask(int taskId) {
+        dbHelper.deleteTask(taskId);
+        loadTasksFromDb(); // Load lại list sau khi xóa
     }
 }

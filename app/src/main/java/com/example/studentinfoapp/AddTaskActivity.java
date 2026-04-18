@@ -75,8 +75,10 @@ public class AddTaskActivity extends AppCompatActivity {
         Log.d(TAG, "Task saved: " + title + " | Priority: " + priority + " | Done: " + isCompleted);
         Toast.makeText(this, "Task added!", Toast.LENGTH_SHORT).show();
 
+        Task newTask = new Task(title, desc, dueDate, category, priority, isCompleted);
+
         Intent resultIntent = new Intent();
-        resultIntent.putExtra("NEW_TASK_TITLE", title);
+        resultIntent.putExtra("NEW_TASK", title);
         setResult(RESULT_OK, resultIntent);
         finish();
     }

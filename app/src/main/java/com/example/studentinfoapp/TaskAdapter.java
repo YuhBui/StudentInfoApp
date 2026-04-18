@@ -64,7 +64,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             dateView.setText(task.getDueDate());
             completionCheckbox.setChecked(task.isCompleted());
 
-            if (task.getPriority() == 2) priorityIcon.setImageResource(android.R.drawable.ic_dialog_alert);
+            if (task.getPriority() == "High") priorityIcon.setImageResource(android.R.drawable.ic_dialog_alert);
             else priorityIcon.setImageResource(android.R.drawable.ic_menu_info_details);
 
             itemView.setOnClickListener(v -> listener.onTaskClick(task));
