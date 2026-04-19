@@ -1,24 +1,25 @@
 package com.example.studentinfoapp;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+@Entity(tableName = "tasks")
 public class Task implements Serializable {
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
     private String title;
     private String description;
     private String dueDate;
     private String category;
-
-    // Đổi lại thành String nếu ở AddTaskActivity bạn đang dùng "Low", "Medium", "High"
-    // Nếu bạn bắt buộc dùng int, hãy để lại int và tự map giá trị bên AddTaskActivity
     private String priority;
 
     private boolean isCompleted;
 
-    // CONSTRUCTOR 1: Có đầy đủ 6 tham số (ĐỂ SỬA LỖI CỦA BẠN)
     public Task(String title, String description, String dueDate, String category, String priority, boolean isCompleted) {
-        this.id = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
@@ -27,8 +28,8 @@ public class Task implements Serializable {
         this.isCompleted = isCompleted;
     }
 
-    // CONSTRUCTOR 2: Dùng cho database khi đã có sẵn ID
-    public Task(String id, String title, String description, String dueDate, String category, String priority, boolean isCompleted) {
+    @Ignore
+    public Task(int id, String title, String description, String dueDate, String category, String priority, boolean isCompleted) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -38,8 +39,8 @@ public class Task implements Serializable {
         this.isCompleted = isCompleted;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }

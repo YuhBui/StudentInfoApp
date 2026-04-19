@@ -81,7 +81,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 boolean isTaskCompleted = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_IS_COMPLETED)) == 1;
 
                 Task task = new Task(
-                        cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_ID)),
+                        cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESC)),
                         cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DUE_DATE)),
@@ -95,6 +95,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return taskList;
+    }
+
+    public void updateTask(Task task) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TITLE, task.getTitle());
+        values.put(COLUMN_DESC, task.getDescription());
+        values.put(COLUMN_CATEGORY, task.getCategory());
+        values.put(COLUMN_DUE_DATE, task.getDueDate());
+        values.put(COLUMN_PRIORITY, task.getPriority());
+        values.put(COLUMN_IS_COMPLETED, task.isCompleted() ? 1 : 0);
+
+        // Cập nhật record có ID tương ứng
+        db.update(TABLE_TASKS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(task.getId())});
+        db.close();
     }
 
     // 3. Cập nhật trạng thái isCompleted (Dùng khi check vào checkbox)

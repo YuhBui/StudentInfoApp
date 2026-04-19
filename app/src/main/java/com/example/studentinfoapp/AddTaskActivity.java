@@ -7,29 +7,29 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.studentinfoapp.R;
+import androidx.lifecycle.ViewModelProvider;
 
 public class AddTaskActivity extends AppCompatActivity {
-    private static final String TAG = "AddTaskActivity_Log";
-
     private EditText editTitle, editDesc, editDueDate;
     private Spinner spinnerCategory;
     private RadioGroup radioGroupPriority;
     private CheckBox checkCompleted;
     private Button btnSave;
 
+    private TaskViewModel viewModel;
+    private int editTaskId = -1; // Chuyển sang int
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        Log.d(TAG, "onCreate called");
+
+        // Khởi tạo ViewModel theo chuẩn Lab 15
+        viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         editTitle = findViewById(R.id.editTaskTitle);
         editDesc = findViewById(R.id.editTaskDesc);
@@ -44,6 +44,23 @@ public class AddTaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
 
+        // ===== KIỂM TRA CHẾ ĐỘ SỬA =====
+        Intent intent = getIntent();
+        editTaskId = intent.getIntExtra("EDIT_TASK_ID", -1);
+
+        if (editTaskId != -1) {
+            editTitle.setText(intent.getStringExtra("EDIT_TASK_TITLE"));
+            editDesc.setText(intent.getStringExtra("EDIT_TASK_DESC"));
+            editDueDate.setText(intent.getStringExtra("EDIT_TASK_DEADLINE"));
+
+            String category = intent.getStringExtra("EDIT_TASK_CATEGORY");
+            if (category != null) {
+                int spinnerPosition = adapter.getPosition(category);
+                spinnerCategory.setSelection(spinnerPosition);
+            }
+            btnSave.setText("Edit Task");
+        }
+
         btnSave.setOnClickListener(v -> saveTask());
     }
 
@@ -52,12 +69,8 @@ public class AddTaskActivity extends AppCompatActivity {
         String dueDate = editDueDate.getText().toString().trim();
         String desc = editDesc.getText().toString().trim();
 
-        if (title.isEmpty()) {
-            Toast.makeText(this, "The task title must not be left blank!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (dueDate.isEmpty()) {
-            Toast.makeText(this, "The due date must not be left blank!", Toast.LENGTH_SHORT).show();
+        if (title.isEmpty() || dueDate.isEmpty()) {
+            Toast.makeText(this, "Title and Due Date cannot be empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -66,65 +79,37 @@ public class AddTaskActivity extends AppCompatActivity {
 
         String priority = "Low";
         int selectedId = radioGroupPriority.getCheckedRadioButtonId();
-        if (selectedId == R.id.radioMed) {
-            priority = "Medium";
-        } else if (selectedId == R.id.radioHigh) {
-            priority = "High";
+        if (selectedId == R.id.radioMed) priority = "Medium";
+        else if (selectedId == R.id.radioHigh) priority = "High";
+
+        if (editTaskId != -1) {
+            // ----- TRƯỜNG HỢP SỬA (UPDATE) -----
+            Task updatedTask = new Task(title, desc, dueDate, category, priority, isCompleted);
+            updatedTask.setId(editTaskId); // Gán lại ID cũ để Room biết đường lưu đè
+
+            viewModel.update(updatedTask); // Cập nhật qua ViewModel
+
+            Toast.makeText(this, "Task updated!", Toast.LENGTH_SHORT).show();
+
+            // Xóa hết Activity ở trên và quay về Trang chủ
+            Intent mainIntent = new Intent(this, MainActivity.class);
+            mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainIntent);
+            finish();
+
+        } else {
+            // ----- TRƯỜNG HỢP THÊM MỚI (INSERT) -----
+            // Giữ nguyên logic trả dữ liệu về MainActivity để MainActivity tự Insert
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("NEW_TASK_TITLE", title);
+            resultIntent.putExtra("NEW_TASK_DESC", desc);
+            resultIntent.putExtra("NEW_TASK_DUE_DATE", dueDate);
+            resultIntent.putExtra("NEW_TASK_CATEGORY", category);
+            resultIntent.putExtra("NEW_TASK_PRIORITY", priority);
+            resultIntent.putExtra("NEW_TASK_COMPLETED", isCompleted);
+
+            setResult(RESULT_OK, resultIntent);
+            finish();
         }
-
-        Log.d(TAG, "Task saved: " + title + " | Priority: " + priority + " | Done: " + isCompleted);
-        Toast.makeText(this, "Task added!", Toast.LENGTH_SHORT).show();
-
-        Task newTask = new Task(title, desc, dueDate, category, priority, isCompleted);
-
-        Intent resultIntent = new Intent();
-        resultIntent.putExtra("NEW_TASK", title);
-        setResult(RESULT_OK, resultIntent);
-        finish();
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("SAVED_TITLE", editTitle.getText().toString());
-        Log.d(TAG, "onSaveInstanceState: Instance state saved");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        String savedTitle = savedInstanceState.getString("SAVED_TITLE", "");
-        editTitle.setText(savedTitle);
-        Log.d(TAG, "onRestoreInstanceState: Instance state restored");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume called");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy called");
     }
 }

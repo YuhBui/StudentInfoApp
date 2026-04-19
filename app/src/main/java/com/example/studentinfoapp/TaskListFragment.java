@@ -43,6 +43,7 @@ public class TaskListFragment extends Fragment {
             } else {
                 // Đang mở trên Phone: Nhảy sang TaskDetailActivity như cũ
                 Intent intent = new Intent(getActivity(), TaskDetailActivity.class);
+                intent.putExtra("TASK_ID", task.getId());
                 intent.putExtra("TASK_TITLE", task.getTitle());
                 intent.putExtra("TASK_DESC", task.getDescription());
                 intent.putExtra("TASK_CATEGORY", task.getCategory());
