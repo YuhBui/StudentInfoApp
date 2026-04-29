@@ -3,6 +3,7 @@ package com.example.studentinfoapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button; // Đã thêm thư viện này
 import android.widget.ImageButton;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,7 +18,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 public class MainActivity extends AppCompatActivity {
     private TaskViewModel viewModel;
 
-    // 1. SỬA LỖI N/A: Nhận đầy đủ dữ liệu từ Intent thay vì gán cứng "N/A"
     private final ActivityResultLauncher<Intent> addTaskLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
@@ -39,19 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        applyTheme(); // Áp dụng giao diện sáng/tối trước khi load layout
+        applyTheme();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 2. KHỞI TẠO VIEWMODEL
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        // 3. QUAN SÁT DỮ LIỆU (LiveData): Tự động cập nhật UI khi database thay đổi
         viewModel.getTaskList().observe(this, tasks -> {
             Log.d("Lab15_Observe", "Danh sách task đã cập nhật, số lượng: " + tasks.size());
-            // Lưu ý: Nếu Adapter của bạn nằm trong Fragment,
-            // Fragment đó cũng nên observe cùng một ViewModel này để cập nhật RecyclerView.
         });
 
         if (savedInstanceState == null) {
@@ -60,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
-        // Nút thêm Task mới
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddTaskActivity.class);
@@ -80,11 +75,25 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ImagePickerActivity.class);
             startActivity(intent);
         });
+
+        // --- XỬ LÝ 2 NÚT BẤM MỞ BÀI TẬP LAB ---
+        Button btnThreading = findViewById(R.id.btnThreading);
+        Button btnApi = findViewById(R.id.btnApi);
+
+        // Chuyển sang màn hình Lab 16
+        btnThreading.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ThreadingExerciseActivity.class);
+            startActivity(intent);
+        });
+
+        // Chuyển sang màn hình Lab 17-18
+        btnApi.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, ApiActivity.class);
+            startActivity(intent);
+        });
+        // --------------------------------------
     }
 
-    /**
-     * Xử lý khi chọn một Task từ danh sách (Dành cho Tablet hoặc chuyển Fragment trên Phone)
-     */
     public void onTaskSelected(Task task) {
         TaskDetailFragment detailFragment = new TaskDetailFragment();
         Bundle args = new Bundle();
