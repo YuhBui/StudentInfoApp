@@ -4,9 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.studentinfoapp"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.studentinfoapp"
@@ -28,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -42,7 +40,7 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    val room_version = "2.6.1"
+    val room_version = "2.8.1"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.work:work-runtime:2.8.1")
     annotationProcessor("androidx.room:room-compiler:$room_version")
