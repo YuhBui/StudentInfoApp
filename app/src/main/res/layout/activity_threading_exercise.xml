@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:background="#F0F2F5"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:fitsSystemWindows="true">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
