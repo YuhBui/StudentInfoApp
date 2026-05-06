@@ -21,14 +21,13 @@ public class AddTaskActivity extends AppCompatActivity {
     private Button btnSave;
 
     private TaskViewModel viewModel;
-    private int editTaskId = -1; // Chuyển sang int
+    private int editTaskId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
-        // Khởi tạo ViewModel theo chuẩn Lab 15
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
         editTitle = findViewById(R.id.editTaskTitle);
@@ -44,7 +43,6 @@ public class AddTaskActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(adapter);
 
-        // ===== KIỂM TRA CHẾ ĐỘ SỬA =====
         Intent intent = getIntent();
         editTaskId = intent.getIntExtra("EDIT_TASK_ID", -1);
 
@@ -83,23 +81,19 @@ public class AddTaskActivity extends AppCompatActivity {
         else if (selectedId == R.id.radioHigh) priority = "High";
 
         if (editTaskId != -1) {
-            // ----- TRƯỜNG HỢP SỬA (UPDATE) -----
             Task updatedTask = new Task(title, desc, dueDate, category, priority, isCompleted);
-            updatedTask.setId(editTaskId); // Gán lại ID cũ để Room biết đường lưu đè
+            updatedTask.setId(editTaskId);
 
-            viewModel.update(updatedTask); // Cập nhật qua ViewModel
+            viewModel.update(updatedTask);
 
             Toast.makeText(this, "Task updated!", Toast.LENGTH_SHORT).show();
 
-            // Xóa hết Activity ở trên và quay về Trang chủ
             Intent mainIntent = new Intent(this, MainActivity.class);
             mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(mainIntent);
             finish();
 
         } else {
-            // ----- TRƯỜNG HỢP THÊM MỚI (INSERT) -----
-            // Giữ nguyên logic trả dữ liệu về MainActivity để MainActivity tự Insert
             Intent resultIntent = new Intent();
             resultIntent.putExtra("NEW_TASK_TITLE", title);
             resultIntent.putExtra("NEW_TASK_DESC", desc);

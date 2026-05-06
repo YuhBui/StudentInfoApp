@@ -1,6 +1,15 @@
 package com.example.studentinfoapp;
 
+import android.Manifest;
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +20,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
@@ -47,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
                     Task newTask = new Task(title, desc, dueDate, category, priority, isCompleted);
                     viewModel.insert(newTask);
+
+//                    Intent serviceIntent = new Intent(MainActivity.this, TaskService.class);
+//                    serviceIntent.putExtra("title", title);
+//
+//                    TaskService.enqueueWork(MainActivity.this, serviceIntent);
                 }
             });
 
@@ -56,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        createNotificationChannel();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
 
         viewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
@@ -200,5 +224,55 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         applyTheme();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "task_reminders";
+            CharSequence name = "Task Updates";
+            int importance = NotificationManager.IMPORTANCE_HIGH; // Độ ưu tiên cao để hiện pop-up
+
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription("Notifications for task reminders");
+            channel.setShowBadge(true);
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{0, 500, 250, 500});
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    public void scheduleTaskReminder(Context context, int taskId, long triggerTime) {
+        Intent intent = new Intent(context, TaskAlarmReceiver.class);
+        intent.putExtra("task_id", taskId);
+
+        // Dùng FLAG_IMMUTABLE theo chuẩn bảo mật mới
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                taskId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        if (alarmManager != null) {
+            try {
+                // Lên lịch báo thức chạy ngay cả khi máy ngủ (Doze mode)
+                alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerTime,
+                        pendingIntent
+                );
+                Log.d("AlarmScheduler", "Đã lên lịch báo thức thành công!");
+            } catch (SecurityException e) {
+                Log.e("AlarmScheduler", "Thiếu quyền SCHEDULE_EXACT_ALARM");
+            }
+        }
     }
 }

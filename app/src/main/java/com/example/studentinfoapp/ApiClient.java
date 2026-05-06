@@ -36,7 +36,6 @@ public class ApiClient {
 
             List<Post> posts = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(response.toString());
-            // Lấy 10 bài viết đầu tiên để giao diện không bị quá dài
             for (int i = 0; i < Math.min(10, jsonArray.length()); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
                 Post post = new Post();
@@ -51,7 +50,6 @@ public class ApiClient {
         }
     }
 
-    // BÀI TẬP 3: POST Request
     public static boolean createPost(String title, String body) throws Exception {
         URL url = new URL(BASE_URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -59,7 +57,7 @@ public class ApiClient {
         conn.setConnectTimeout(10000);
         conn.setReadTimeout(10000);
         conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-        conn.setDoOutput(true); // Bắt buộc cho request gửi body
+        conn.setDoOutput(true);
 
         JSONObject jsonBody = new JSONObject();
         jsonBody.put("title", title);
@@ -70,7 +68,6 @@ public class ApiClient {
         out.write(jsonBody.toString().getBytes(StandardCharsets.UTF_8));
         out.close();
 
-        // Status code 201 Created
         return conn.getResponseCode() == 201;
     }
 }

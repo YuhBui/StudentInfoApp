@@ -48,7 +48,6 @@ public class ApiActivity extends AppCompatActivity {
 
         btnCreatePost.setOnClickListener(v -> submitPost());
 
-        // Gọi dữ liệu khi vừa mở màn hình
         loadDataFromApi();
     }
 
@@ -80,7 +79,6 @@ public class ApiActivity extends AppCompatActivity {
         String title = editPostTitle.getText().toString().trim();
         String body = editPostBody.getText().toString().trim();
 
-        // Validation input
         if (title.isEmpty() || body.isEmpty()) {
             Toast.makeText(this, "Bạn cần nhập đầy đủ Tiêu đề và Nội dung", Toast.LENGTH_SHORT).show();
             return;
@@ -101,7 +99,7 @@ public class ApiActivity extends AppCompatActivity {
                         Toast.makeText(this, "Tạo bài viết thành công (Status 201)!", Toast.LENGTH_SHORT).show();
                         editPostTitle.setText("");
                         editPostBody.setText("");
-                        loadDataFromApi(); // Refresh lại danh sách sau khi tạo
+                        loadDataFromApi();
                     } else {
                         Toast.makeText(this, "Có lỗi xảy ra khi tạo bài viết.", Toast.LENGTH_SHORT).show();
                     }
